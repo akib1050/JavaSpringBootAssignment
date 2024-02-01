@@ -3,6 +3,8 @@ package com.akibSpring.bs23.controller;
 import com.akibSpring.bs23.entity.Course;
 import com.akibSpring.bs23.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,11 +15,6 @@ public class myController {
     @Autowired
     private CourseService courseService;
 
-    @GetMapping("/home")
-    public String home()
-    {
-        return "myHome";
-    }
 
     // for getting course
     @GetMapping("/courses")
@@ -42,10 +39,27 @@ public class myController {
     }
 
     //update course using PUT req
-    /*public  Course updateCourse(@RequestBody Course course)
+    @GetMapping("/courses")
+    public  Course updateCourse(@RequestBody Course course)
     {
         return this.courseService.updateCourse(course);
     }
-    */
+
+    public ResponseEntity<HttpStatus>deleteCourse(@PathVariable String courseId)
+    {
+        try{
+            this.courseService.deleteCourse(
+                    Long.parseLong(courseId)
+            );
+            return  new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+
 
 }
